@@ -8,7 +8,46 @@
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 </head>
 <body>
-<div id="logo" class="animated fadeInDown">schedulex</div>
-<div id="footer" class="animated fadeInDown">made with <i class="material-icons">favorite</i> by <a href="https://github.com/GabeConsalter" target="_blank">GabeConsalter</a></div>
+<!--<div id="logo" class="animated fadeInDown">schedulex</div>-->
+<div id="browserError" class="hidden">
+	<h1>"Houston, we've got a problem"</h1>
+	<i class="material-icons" style="font-size:8em; color:#C1CFDA;">sentiment_very_dissatisfied</i>
+	<p>I'm sorry but the schedulex not work at this browser. <br>
+	I've been working to solve this issue,
+	go to a browser that works like: <br>
+	<br>
+	<a href="https://www.mozilla.org/pt-BR/firefox/new/" target="blank"><strong>Firefox</strong></a> <br>
+	<br>
+	thank you.</p>
+</div>
+<div id="box" class="hidden animated fadeInDown">
+	<!-- RANGE PROCESSES -->
+	<label for="processes">
+		<span id="numProcesses" data-slider="processes" class="numberChange">8</span><span data-plural="numProcesses">process</span>
+	</label>
+	<input type="range" name="processes" id="processes" min="1" max="20" value="8" step="1" oninput="setValue('numProcesses', this)">
+
+	<label for="processQueue">
+		process queue size: <span id="numProcessQueue" data-slider="processQueue" class="numberChange">4</span>
+	</label>
+	<input type="range" name="processQueue" id="processQueue" min="1" max="10" value="4" step="1" oninput="setValue('numProcessQueue', this)">
+
+	<label for="processQueue">
+		scheduler algorithm
+	</label>
+	<select>
+		<option>FIFO</option>
+		<option>SJF</option>
+		<option>Priority</option>
+		<option>HRRN</option>
+		<option>RR with preemption</option>
+		<option>RR with preemption and priority</option>
+		<option>SRT with preemption</option>
+	</select>
+
+	<button class="btnFull">GO!</button>
+</div>
+<div id="footer" class="animated fadeInDown"><i class="material-icons">code</i> with <i class="material-icons">favorite</i> by <a href="https://github.com/GabeConsalter" target="_blank">GabeConsalter</a></div>
 </body>
+<script type="text/javascript" src="js/ui.js"></script>
 </html>
