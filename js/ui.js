@@ -1,3 +1,5 @@
+var s;
+
 window.onload = function(){
 	if(browserCheck()){
 		loadBox();
@@ -48,4 +50,39 @@ function loadBox() {
 function loadBrowserError(){
 	document.getElementById('browserError').classList.remove('hidden');
 	document.getElementById('box').classList.add('hidden');
+}
+
+function go() {
+	var args = {
+		processes: Number(document.getElementById('inputProcesses').value),
+		queueSize: Number(document.getElementById('inputQueueSize').value),
+		algorithm: Number(document.getElementById('schedulerAlgorithm').value),
+		processExeTime: [
+			Number(document.getElementById('inputMinTime').value),
+			Number(document.getElementById('inputMaxTime').value)
+		],
+		priority: [
+			Number(document.getElementById('inputMinPri').value),
+			Number(document.getElementById('inputMaxPri').value)
+		],
+		stop: [
+			Number(document.getElementById('inputMinStop').value),
+			Number(document.getElementById('inputMaxStop').value)
+		],
+		quantum: Number(document.getElementById('inputQuantum').value)
+	}
+
+	hide('box');
+	show('panel');
+
+	var w = new Worker('worker.js');
+	console.log(w);
+}
+
+function hide(id) {
+	document.getElementById(id).classList.add('hidden');
+}
+
+function show(id) {
+	document.getElementById(id).classList.remove('hidden');
 }
