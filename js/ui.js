@@ -2,46 +2,25 @@ window.onload = function(){
 	if(browserCheck()){
 		loadBox();
 		loadSliderValues();
-		loadPlural();	
 	}else{
 		loadBrowserError();
 	}
 }
 
-function setValue(id, r) {
-	var el = document.getElementById(id);
-	el.textContent = r.value;
-
-	loadPlural(id);
-}
-
 function loadSliderValues() {
-	var els = document.querySelectorAll('[data-slider]');
+	var els = document.querySelectorAll('[data-output]');
 	for(var i = 0; i < els.length; i++){
-		els[i].textContent = document.getElementById(els[i].getAttribute('data-slider')).value;
+		document.getElementById(els[i].getAttribute('data-output')).textContent = els[i].value;
 	}
 }
 
-function loadPlural(id){
+function setMin(t, el, l) {
+	el = document.getElementById(el);
+	l = document.getElementById(l);
 
-	if(id){
-
-		var num = Number(document.getElementById(id).textContent);
-		if(num > 1)
-			document.querySelector('[data-plural="'+ id +'"]').textContent = 'processes';
-		else
-			document.querySelector('[data-plural="'+ id +'"]').textContent = 'process';
-
-	}else{
-		var els = document.querySelectorAll('[data-plural]');
-		for(var i = 0; i < els.length; i++){
-
-			if(Number(document.getElementById(els[i].getAttribute('data-plural')).textContent) > 1)
-				els[i].textContent = 'processes';
-			else
-				els[i].textContent = 'process';
-		}
-	}
+	el.min = t.value;
+	el.value = t.value;
+	l.textContent = el.value;
 }
 
 function browserCheck() {
