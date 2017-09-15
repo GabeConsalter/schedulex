@@ -75,8 +75,9 @@ function go() {
 	hide('box');
 	show('panel');
 
-	var w = new Worker('worker.js');
-	console.log(w);
+	var w = new window.Worker('js/worker.js');
+	//var s = new window.Worker('js/scheduler.js');
+	w.postMessage(args);
 }
 
 function hide(id) {
