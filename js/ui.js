@@ -4,6 +4,7 @@ window.onload = function(){
 	if(browserCheck()){
 		loadBox();
 		loadSliderValues();
+		go();
 	}else{
 		loadBrowserError();
 	}
@@ -53,6 +54,7 @@ function loadBrowserError(){
 }
 
 function go() {
+/*
 	var args = {
 		processes: Number(document.getElementById('inputProcesses').value),
 		queueSize: Number(document.getElementById('inputQueueSize').value),
@@ -70,7 +72,17 @@ function go() {
 			Number(document.getElementById('inputMaxStop').value)
 		],
 		quantum: Number(document.getElementById('inputQuantum').value)
-	}
+	}*/
+
+	var args = {
+		processes: 8,
+		queueSize: 4,
+		algorithm: 0,
+		processExeTime: [1, 30],
+		priority: [1, 15],
+		stop: [1, 30],
+		quantum: [5]
+	};
 
 	hide('box');
 	show('panel');

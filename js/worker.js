@@ -1,35 +1,41 @@
+var args;
+var pnum;
+
 self.addEventListener('message', function(e){
 
 	if(!e)
 		self.terminate();
 
-	var args = e.data;
-	var pnum = 0;
+	args = e.data;
+	pnum = 0;
 	var intervalSeconds = 0;
 
-	var interval = setInterval(function(){
+	while(args.processes--){
+		var p = {
+			pid: 'p' + pnum,
+			exeTime: random(args.processExeTime[0], args.processExeTime[1]),
+			priority: random(args.priority[0], args.priority[1])
+		}
 
-			if(args.processes - 1 == 0)
-				clearInterval(interval);
+		console.log('New process: ', p);
 
-			var p = {
-				pid: 'p' + pnum,
-				exeTime: random(args.processExeTime[0], args.processExeTime[1]),
-				priority: random(args.priority[0], args.priority[1])
-			}
+		pnum++;
 
-			console.log('New process: ', p);
-
-			pnum++;
-			args.processes--;
-
-			intervalSeconds = random(args.stop[0], args.stop[1]) * 1000;
-
-			console.log(interval);
-	}, 2000);
+		sleep(random(args.stop[0], args.stop[1]));
+	}
 
 }, false);
 
 function random(a, b){
 	return Math.floor(Math.random() * (b - a + 1)) + a;
+}
+
+function sleep(s){
+	console.log(s);
+	var start = new Date().getTime();
+	var end = start;
+
+	while(end < start + (s * 1000)){
+		end = new Date().getTime();
+	}
 }
