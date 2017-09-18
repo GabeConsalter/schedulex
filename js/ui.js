@@ -1,4 +1,5 @@
-var s;
+var queue = [];
+var pexe;
 
 window.onload = function(){
 	if(browserCheck()){
@@ -80,7 +81,7 @@ function go() {
 		algorithm: 0,
 		processExeTime: [1, 30],
 		priority: [1, 15],
-		stop: [1, 30],
+		stop: [1, 2],
 		quantum: [5]
 	};
 
@@ -88,8 +89,24 @@ function go() {
 	show('panel');
 
 	var w = new window.Worker('js/worker.js');
-	//var s = new window.Worker('js/scheduler.js');
+	var s = new window.Worker('js/scheduler.js');
+
 	w.postMessage(args);
+
+	w.onmessage = function(e){
+		queue.push(e.data);
+		s.postMessage([args, queue]);
+	}
+
+	s.onmessage = function(e){
+		if(e.data[0] == '#1'){
+			
+		}
+
+		if(e.data[0] == '#5'){
+			executing(e.data[1]);
+		}
+	}
 }
 
 function hide(id) {
@@ -99,3 +116,15 @@ function hide(id) {
 function show(id) {
 	document.getElementById(id).classList.remove('hidden');
 }
+
+function executing(p){
+	queue.shift();
+	pexe = p;
+	console.log(p);
+}
+
+/*
+MESSAGE CODES
+#1: request if exists any process at process queue
+#5: process executing
+*/
