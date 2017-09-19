@@ -1,17 +1,15 @@
 var args;
-var queue;
-var exe;
-var work = false;
-
-while(!work)
-	self.postMessage('#1');
+var queue = 0;
+var exe = false;
 
 self.addEventListener('message', function(e){
-	args = e.data[0];
-	queue = e.data[1];
 
-	if(!exe){
-		go(args.algorithm);	
+	if(e.data[0] == '#3'){//get args
+		args = e.data[1];
+		watchQueue();
+	}
+	if(e.data[0] == '#2'){//update queue
+		queue = e.data[1];
 	}
 
 }, false);
@@ -25,11 +23,18 @@ function go(a) {
 }
 
 function fifo() {
-	var p = queue[0];
-	self.postMessage(['#5', p]);
+	if(!exe){
+		while(queue.length > 0){
+			if(queue[0]){
+				exe = true;
+				var p = queue.shift();
+				self.postMessage(['#2', queue]);
 
-	console.log('Executing', p.pid, '...');
-	sleep(5);
+				console.log('SCHEDULER: executing', p.pid + '. Exe time:', p.exeTime);
+				sleep(p.exeTime);
+			}
+		}
+	}
 }
 
 function sleep(s){
@@ -39,4 +44,12 @@ function sleep(s){
 	while(end < start + (s * 1000)){
 		end = new Date().getTime();
 	}
+}
+
+function watchQueue() {
+	while(queue.length <= 0 || queue == 0){
+		console.log('SCHEDULER: waiting a process...');
+	}
+
+	go(args.algorithm);
 }

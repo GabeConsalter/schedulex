@@ -19,6 +19,7 @@ self.addEventListener('message', function(e){
 				priority: random(args.priority[0], args.priority[1])
 			}
 
+			console.log('WORKER: new process ->', p.pid);
 			self.postMessage(p);
 
 			pnum++;
@@ -34,7 +35,6 @@ function random(a, b){
 }
 
 function sleep(s){
-	console.log(s);
 	var start = new Date().getTime();
 	var end = start;
 

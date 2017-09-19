@@ -79,7 +79,7 @@ function go() {
 		processes: 8,
 		queueSize: 4,
 		algorithm: 0,
-		processExeTime: [1, 30],
+		processExeTime: [1, 10],
 		priority: [1, 15],
 		stop: [1, 2],
 		quantum: [5]
@@ -92,19 +92,20 @@ function go() {
 	var s = new window.Worker('js/scheduler.js');
 
 	w.postMessage(args);
+	s.postMessage(['#3', args]);
 
 	w.onmessage = function(e){
 		queue.push(e.data);
-		s.postMessage([args, queue]);
+		s.postMessage(['#2', queue]);
 	}
 
 	s.onmessage = function(e){
-		if(e.data[0] == '#1'){
-			
+		if(e.data[0] == '#2'){
+			queue = e.data[1];
 		}
 
 		if(e.data[0] == '#5'){
-			executing(e.data[1]);
+			pexe = e.data[1];
 		}
 	}
 }
@@ -117,14 +118,10 @@ function show(id) {
 	document.getElementById(id).classList.remove('hidden');
 }
 
-function executing(p){
-	queue.shift();
-	pexe = p;
-	console.log(p);
-}
-
 /*
 MESSAGE CODES
 #1: request if exists any process at process queue
+#2: update queue
+#3: send args
 #5: process executing
 */
