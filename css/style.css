@@ -103,6 +103,13 @@ input[type=range]{
   	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   	padding:20px;
   	text-align:center;
+  	max-height:70vh;
+  	overflow: auto;
+}
+
+#box button{
+	margin-bottom:20px;
+	margin-top:20px;
 }
 
 .numberChange{
@@ -121,4 +128,39 @@ input[type=range]{
 #browserError{
 	text-align: center;
 	font-weight: 300;
+}
+
+#panel{
+	width:95%;
+	margin:auto;
+}
+
+#queue{
+	background:#FAFAFA;
+	border-radius:5px;
+  	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  	width:50px;
+  	padding:15px;
+}
+
+.processBlock{
+	width:50px;
+	height:50px;
+	border-radius:50px;
+	line-height: 47px;
+	margin-top:5px;
+	margin-bottom:5px;
+	flex:auto 1;
+	text-align:center;
+	font-weight: 700;
+	color:#FFF;
+	text-shadow: 1px 1px 3px #000;
+}
+
+#cpu{
+	background:#FAFAFA;
+	border-radius:5px;
+  	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  	width:100px;	
+  	height:100px;
 }

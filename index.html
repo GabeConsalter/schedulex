@@ -2,13 +2,14 @@
 <html>
 <head>
 	<title>schedulex</title>
+	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 </head>
 <body>
-<!--<div id="logo" class="animated fadeInDown">schedulex</div>-->
+<div id="logo" class="animated fadeInDown">schedulex</div>
 <div id="browserError" class="hidden">
 	<h1>"Houston, we've got a problem"</h1>
 	<i class="material-icons" style="font-size:8em; color:#C1CFDA;">sentiment_very_dissatisfied</i>
@@ -22,32 +23,97 @@
 </div>
 <div id="box" class="hidden animated fadeInDown">
 	<!-- RANGE PROCESSES -->
-	<label for="processes">
-		<span id="numProcesses" data-slider="processes" class="numberChange">8</span><span data-plural="numProcesses">process</span>
+	<label for="outputProcesses">
+		<output id="outputProcesses" name="outputProcesses" class="numberChange">1</output><span data-plural="outputProcesses">process</span>
 	</label>
-	<input type="range" name="processes" id="processes" min="1" max="20" value="8" step="1" oninput="setValue('numProcesses', this)">
+	<input type="range" id="inputProcesses" name="inputProcesses" min="1" max="20" value="8" step="1" data-output="outputProcesses" oninput="outputProcesses.value = inputProcesses.value">
 
-	<label for="processQueue">
-		process queue size: <span id="numProcessQueue" data-slider="processQueue" class="numberChange">4</span>
+	<label for="outputQueueSize">
+		process queue size: <output id="outputQueueSize" name="outputQueueSize" class="numberChange">4</output>
 	</label>
-	<input type="range" name="processQueue" id="processQueue" min="1" max="10" value="4" step="1" oninput="setValue('numProcessQueue', this)">
+	<input type="range" id="inputQueueSize" name="inputQueueSize" min="1" max="10" value="4" step="1" data-output="outputQueueSize" oninput="outputQueueSize.value = inputQueueSize.value">
 
-	<label for="processQueue">
+	<label for="schedulerAlgorithm">
 		scheduler algorithm
 	</label>
-	<select>
-		<option>FIFO</option>
-		<option>SJF</option>
-		<option>Priority</option>
-		<option>HRRN</option>
-		<option>RR with preemption</option>
-		<option>RR with preemption and priority</option>
-		<option>SRT with preemption</option>
+	<select id="schedulerAlgorithm" name="schedulerAlgorithm">
+		<option value="0">FIFO</option>
+		<option value="1">SJF</option>
+		<option value="2">Priority</option>
+		<option value="3">HRRN</option>
+		<option value="4">RR with preemption</option>
+		<option value="5">RR with preemption and priority</option>
+		<option value="6">SRT with preemption</option>
 	</select>
+	<hr>
+	<label for="outputMinTime">
+		process execution time random range (s)
+	</label>
+	<label for="inputMinTime">
+		<span>min</span> <output id="outputMinTime" name="outputMinTime" class="numberChange">0</output><span>s</span>
+	</label>
+	<input type="range" id="inputMinTime" name="inputMinTime" min="1" max="30" value="1" step="1" data-output="outputMinTime" oninput="outputMinTime.value = inputMinTime.value; setMin(this, 'inputMaxTime', 'outputMaxTime')">
 
-	<button class="btnFull">GO!</button>
+	<label for="inputMaxTime">
+		<span>max</span> <output id="outputMaxTime" name="outputMaxTime" class="numberChange">0</output><span>s</span>
+	</label>
+	<input type="range" id="inputMaxTime" name="inputMaxTime" min="30" max="60" value="30" step="1" data-output="outputMaxTime" oninput="outputMaxTime.value = inputMaxTime.value;">
+
+	<label for="outputMinPri">
+		process priority random range
+	</label>
+	<label for="inputMinPri">
+		<span>min</span> <output id="outputMinPri" name="outputMinPri" class="numberChange">0</output>
+	</label>
+	<input type="range" id="inputMinPri" name="inputMinPri" min="1" max="7" value="1" step="1" data-output="outputMinPri" oninput="outputMinPri.value = inputMinPri.value; setMin(this, 'inputMaxPri', 'outputMaxPri')">
+
+	<label for="inputMaxPri">
+		<span>max</span> <output id="outputMaxPri" name="outputMaxPri" class="numberChange">0</output>
+	</label>
+	<input type="range" id="inputMaxPri" name="inputMaxPri" min="7" max="15" value="30" step="1" data-output="outputMaxPri" oninput="outputMaxPri.value = inputMaxPri.value;">
+
+	<label for="outputMinStop">
+		creator thread stop time (s)
+	</label>
+	<label for="inputMinStop">
+		<span>min</span> <output id="outputMinStop" name="outputMinStop" class="numberChange">0</output><span>s</span>
+	</label>
+	<input type="range" id="inputMinStop" name="inputMinStop" min="1" max="30" value="1" step="1" data-output="outputMinStop" oninput="outputMinStop.value = inputMinStop.value; setMin(this, 'inputMaxStop', 'outputMaxStop')">
+
+	<label for="inputMaxStop">
+		<span>max</span> <output id="outputMaxStop" name="outputMaxStop" class="numberChange">0</output><span>s</span>
+	</label>
+	<input type="range" id="inputMaxStop" name="inputMaxStop" min="30" max="60" value="30" step="1" data-output="outputMaxStop" oninput="outputMaxStop.value = inputMaxStop.value;">
+
+	<label for="outputQuantum">
+		process quantum value (s)
+	</label>
+	<label for="inputQuantum">
+		<output id="outputQuantum" name="outputQuantum" class="numberChange">0</output><span>s</span>
+	</label>
+	<input type="range" id="inputQuantum" name="inputQuantum" min="1" max="60" value="2" step="1" data-output="outputQuantum" oninput="outputQuantum.value = inputQuantum.value;">
+
+
+
+	<button class="btnFull" onclick="go();">GO!</button>
+</div>
+<div id="panel" class="	">
+	<table>
+		<tr>
+			<td>
+				<div id="queue">
+					<div class="process"></div>
+				</div>	
+			</td>
+			<td>
+				<div id="cpu">
+					
+				</div>	
+			</td>
+		</tr>
+	</table>
 </div>
 <div id="footer" class="animated fadeInDown"><i class="material-icons">code</i> with <i class="material-icons">favorite</i> by <a href="https://github.com/GabeConsalter" target="_blank">GabeConsalter</a></div>
 </body>
-<script type="text/javascript" src="js/ui.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 </html>
