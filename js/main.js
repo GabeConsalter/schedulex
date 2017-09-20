@@ -1,5 +1,15 @@
+/*
+MESSAGE CODES
+	#1: request if exists any process at process queue
+	#2: update queue
+	#3: send queue and args to scheduler to execute a process
+	#4: scheduler is executing, receive process in execution
+	#5: process executing
+	#6: scheduler execution end
+*/
+
 var queue = [];
-var pexe;
+var schedulerExecuting = false;
 
 window.onload = function(){
 	if(browserCheck()){
@@ -78,7 +88,7 @@ function go() {
 	var args = {
 		processes: 8,
 		queueSize: 4,
-		algorithm: 0,
+		algorithm: 3,
 		processExeTime: [1, 10],
 		priority: [1, 15],
 		stop: [1, 2],
@@ -92,21 +102,36 @@ function go() {
 	var s = new window.Worker('js/scheduler.js');
 
 	w.postMessage(args);
-	s.postMessage(['#3', args]);
 
 	w.onmessage = function(e){
+		e.data.waitTime = new Date().getTime();
 		queue.push(e.data);
-		s.postMessage(['#2', queue]);
+		uiAddProcess(e.data);
+
+		if(!schedulerExecuting)
+			s.postMessage(['#3', queue, args]);
 	}
 
 	s.onmessage = function(e){
-		if(e.data[0] == '#2'){
-			queue = e.data[1];
+		if(e.data[0] == '#4'){
+			schedulerExecuting = true;
+			queueRemove(e.data[1]);
 		}
 
-		if(e.data[0] == '#5'){
-			pexe = e.data[1];
+		if(e.data == '#6'){
+			if(queue.length > 0)
+				s.postMessage(['#3', queue, args]);
+			else
+				console.log('END!');
 		}
+	}
+}
+
+function queueRemove(p) {
+	for(var i = 0; i < queue.length; i++){
+		if(queue[i].pid == p.pid)
+			uiProcessToExecuting(queue[i]);
+			queue.splice(i, 1);
 	}
 }
 
@@ -118,10 +143,24 @@ function show(id) {
 	document.getElementById(id).classList.remove('hidden');
 }
 
-/*
-MESSAGE CODES
-#1: request if exists any process at process queue
-#2: update queue
-#3: send args
-#5: process executing
-*/
+function uiAddProcess(p) {
+	var queue = document.getElementById('queue');
+	var block = document.createElement('div');
+	block.appendChild(document.createTextNode(p.pid));
+	block.classList.add('processBlock');
+	block.style.background = uiColorRandom();
+	queue.appendChild(block);
+}
+
+function uiColorRandom(){
+	var color = '#'; // hexadecimal starting symbol
+	var letters = ['2e5266','ba3f1d','521945','912f56','02111b','5d737e','df2935','86ba90'
+					,'496ddb','ee8434','550527','f44708','ee2677','297373','c6d8d3','2f4858']; //Set your colors here
+	color += letters[Math.floor(Math.random() * letters.length)];
+
+	return color;
+}
+
+function uiProcessToExecuting(p) {
+	
+}

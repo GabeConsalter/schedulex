@@ -16,7 +16,8 @@ self.addEventListener('message', function(e){
 			var p = {
 				pid: 'p' + pnum,
 				exeTime: random(args.processExeTime[0], args.processExeTime[1]),
-				priority: random(args.priority[0], args.priority[1])
+				priority: random(args.priority[0], args.priority[1]),
+				waitTime: 0
 			}
 
 			console.log('WORKER: new process ->', p.pid);

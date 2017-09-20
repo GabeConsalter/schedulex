@@ -1,12 +1,12 @@
 var args;
 var queue = 0;
-var exe = false;
 
 self.addEventListener('message', function(e){
 
-	if(e.data[0] == '#3'){//get args
-		args = e.data[1];
-		watchQueue();
+	if(e.data[0] == '#3'){//get queue and args to execute a process
+		queue = e.data[1];
+		args = e.data[2];
+		go(args.algorithm);
 	}
 	if(e.data[0] == '#2'){//update queue
 		queue = e.data[1];
@@ -15,26 +15,79 @@ self.addEventListener('message', function(e){
 }, false);
 
 function go(a) {
+	
 	switch(a){
 		case 0:
-			if(queue.length > 0) fifo();
+			fifo();
+			break;
+		case 1:
+			sjf();
+			break;
+		case 2:
+			priority();
+			break;
+		case 3:
+			hrrn();
 			break;
 	}
 }
 
 function fifo() {
-	if(!exe){
-		while(queue.length > 0){
-			if(queue[0]){
-				exe = true;
-				var p = queue.shift();
-				self.postMessage(['#2', queue]);
+	var p = queue.shift();
+	self.postMessage(['#4', p]);
+	console.log('SCHEDULER: executing', p.pid + '. Exe time:', p.exeTime);
+	sleep(p.exeTime);
+	self.postMessage('#6');
+}
 
-				console.log('SCHEDULER: executing', p.pid + '. Exe time:', p.exeTime);
-				sleep(p.exeTime);
+function sjf() {
+	var p = queue[0];
+	if(queue.length > 1){
+		for(var i = 1; i < queue.length; i++){
+			if(p.exeTime > queue[i].exeTime){
+				p = queue[i];
 			}
 		}
 	}
+
+	self.postMessage(['#4', p]);
+	console.log('SCHEDULER: executing', p.pid + '. Exe time:', p.exeTime);
+	sleep(p.exeTime);
+	self.postMessage('#6');
+}
+
+function priority() {
+	var p = queue[0];
+	if(queue.length > 1){
+		for(var i = 1; i < queue.length; i++){
+			if(p.priority < queue[i].priority){
+				p = queue[i];
+			}
+		}
+	}
+
+	self.postMessage(['#4', p]);
+	console.log('SCHEDULER: executing', p.pid + '. Exe time:', p.exeTime, '. Priority:', p.priority);
+	sleep(p.exeTime);
+	self.postMessage('#6');
+}
+
+function hrrn() {
+	var p = queue[0];
+	if(queue.length > 1){
+		for(var i = 1; i < queue.length; i++){
+			var rr = (p.waitTime + p.exeTime) / p.exeTime;
+			var qrr = (queue[i].waitTime + queue[i].exeTime) / queue[i].exeTime;
+			if(rr < qrr){
+				p = queue[i];
+			}
+		}
+	}
+
+	self.postMessage(['#4', p]);
+	console.log('SCHEDULER: executing', p.pid + '. Exe time:', p.exeTime, '. Priority:', p.priority);
+	sleep(p.exeTime);
+	self.postMessage('#6');
 }
 
 function sleep(s){
