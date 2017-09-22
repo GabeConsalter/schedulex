@@ -41,9 +41,6 @@
 		<option value="1">SJF</option>
 		<option value="2">Priority</option>
 		<option value="3">HRRN</option>
-		<option value="4">RR with preemption</option>
-		<option value="5">RR with preemption and priority</option>
-		<option value="6">SRT with preemption</option>
 	</select>
 	<hr>
 	<label for="outputMinTime">
@@ -97,21 +94,15 @@
 
 	<button class="btnFull" onclick="go();">GO!</button>
 </div>
-<div id="panel" class="	">
-	<table>
-		<tr>
-			<td>
-				<div id="queue">
-					<div class="process"></div>
-				</div>	
-			</td>
-			<td>
-				<div id="cpu">
-					
-				</div>	
-			</td>
-		</tr>
-	</table>
+<div id="panel" class="hidden">
+	<div id="queue">
+		<span>queue</span>
+		<br>
+		<br>
+	</div>	
+	<div id="cpu">
+		<span>cpu</span>
+	</div>
 </div>
 <div id="footer" class="animated fadeInDown"><i class="material-icons">code</i> with <i class="material-icons">favorite</i> by <a href="https://github.com/GabeConsalter" target="_blank">GabeConsalter</a></div>
 </body>

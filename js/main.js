@@ -15,7 +15,6 @@ window.onload = function(){
 	if(browserCheck()){
 		loadBox();
 		loadSliderValues();
-		go();
 	}else{
 		loadBrowserError();
 	}
@@ -65,7 +64,7 @@ function loadBrowserError(){
 }
 
 function go() {
-/*
+
 	var args = {
 		processes: Number(document.getElementById('inputProcesses').value),
 		queueSize: Number(document.getElementById('inputQueueSize').value),
@@ -83,17 +82,7 @@ function go() {
 			Number(document.getElementById('inputMaxStop').value)
 		],
 		quantum: Number(document.getElementById('inputQuantum').value)
-	}*/
-
-	var args = {
-		processes: 8,
-		queueSize: 4,
-		algorithm: 3,
-		processExeTime: [1, 10],
-		priority: [1, 15],
-		stop: [1, 2],
-		quantum: [5]
-	};
+	}
 
 	hide('box');
 	show('panel');
@@ -115,14 +104,17 @@ function go() {
 	s.onmessage = function(e){
 		if(e.data[0] == '#4'){
 			schedulerExecuting = true;
+			uiExecuteProcess(e.data[1]);
 			queueRemove(e.data[1]);
 		}
 
 		if(e.data == '#6'){
-			if(queue.length > 0)
+			if(queue.length > 0){
 				s.postMessage(['#3', queue, args]);
-			else
+				uiEndExecution();
+			}else{
 				console.log('END!');
+			}
 		}
 	}
 }
@@ -130,7 +122,6 @@ function go() {
 function queueRemove(p) {
 	for(var i = 0; i < queue.length; i++){
 		if(queue[i].pid == p.pid)
-			uiProcessToExecuting(queue[i]);
 			queue.splice(i, 1);
 	}
 }
@@ -144,12 +135,27 @@ function show(id) {
 }
 
 function uiAddProcess(p) {
+
 	var queue = document.getElementById('queue');
+
 	var block = document.createElement('div');
-	block.appendChild(document.createTextNode(p.pid));
+	block.setAttribute('id', p.pid);
 	block.classList.add('processBlock');
 	block.style.background = uiColorRandom();
+
+	var pid = document.createElement('span');
+	pid.appendChild(document.createTextNode(p.pid));
+	pid.classList.add('pid');
+
+	var pdata = document.createElement('p');
+	var data = 'Execution time: ' + p.exeTime + '<br> Priority: ' + p.priority;
+	pdata.innerHTML = data;
+
+
+	block.appendChild(pid);
+	block.appendChild(pdata);	
 	queue.appendChild(block);
+
 }
 
 function uiColorRandom(){
@@ -161,6 +167,14 @@ function uiColorRandom(){
 	return color;
 }
 
-function uiProcessToExecuting(p) {
-	
+function uiExecuteProcess(p) {
+
+	var cpu = document.getElementById('cpu');
+	var block = document.getElementById(p.pid);
+	cpu.appendChild(block);
+}
+
+function uiEndExecution(p) {
+	console.log(document.getElementById('cpu').childNodes);
+	document.getElementById('cpu').removeChild(document.getElementById('cpu').childNodes[3]);
 }

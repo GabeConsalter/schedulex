@@ -1,5 +1,6 @@
 var args;
 var queue = 0;
+var f = true;
 
 self.addEventListener('message', function(e){
 
@@ -15,6 +16,10 @@ self.addEventListener('message', function(e){
 }, false);
 
 function go(a) {
+
+	if(f) sleep(1); //time to view
+
+	f = false;
 	
 	switch(a){
 		case 0:
